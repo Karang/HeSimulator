@@ -18,12 +18,27 @@ public class GCSclient extends Thread {
 	public void run() {
 		while (!isInterrupted()) {
 			try {
-				int t;
-				String tmp="" ;
-				t = socket.getInputStream().read();
-				tmp = tmp + (char)t;
-				
-				System.out.println(tmp) ;
+				if (socket.getInputStream().available() >= 2) {
+					char c = (char)socket.getInputStream().read();
+					if (c=='T' || c=='P' || c=='Y' || c=='R') {
+						int i = socket.getInputStream().read();
+						float v = (i-127) / 127f;
+						
+						if (c == 'T') { // Thrust
+							uav.thrust_ref = v;
+							System.out.println("Thrust: "+v);
+						} else if (c == 'P') { // Pitch
+							uav.pitch_ref = v*360;
+							//System.out.println("Pitch: "+v*360);
+						} else if (c == 'Y') { // Yaw
+							uav.yaw_ref = v*360;
+							//System.out.println("Yaw: "+v*360);
+						} else if (c == 'R') { // Roll
+							uav.roll_ref = v*360;
+							//System.out.println("Roll: "+v*360);
+						}
+					}
+				}
 			} catch(Exception e) {
 				e.printStackTrace();
 			}

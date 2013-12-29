@@ -14,10 +14,10 @@ public class Quadcopter {
 	private float pitch = 0;
 	private float roll = 0;
 	
-	private float thrust_ref = 0f;
-	private float yaw_ref = 0;
-	private float pitch_ref = 0;
-	private float roll_ref = 0;
+	public float thrust_ref = 0f;
+	public float yaw_ref = 0;
+	public float pitch_ref = 0;
+	public float roll_ref = 0;
 	
 	private final PID yaw_pid = new PID(1, 0, 0);
 	private final PID pitch_pid = new PID(1, 0, 0);
@@ -26,7 +26,7 @@ public class Quadcopter {
 	private float x, y, z;
 	
 	private float m = 1;
-	private float g = 0.98f;
+	private float g = 9.8f;
 	
 	public Quadcopter() {
 		x = 0;
@@ -36,9 +36,9 @@ public class Quadcopter {
 	
 	public void update(float dt) {
 		thrust = thrust_ref;
-		yaw += yaw_pid.compute(yaw_ref, yaw, dt);
-		pitch += pitch_pid.compute(pitch_ref, pitch, dt);
-		roll += roll_pid.compute(roll_ref, roll, dt);
+		yaw += yaw_pid.compute(yaw_ref, yaw, dt)*dt;
+		pitch += pitch_pid.compute(pitch_ref, pitch, dt)*dt;
+		roll += roll_pid.compute(roll_ref, roll, dt)*dt;
 		
 		Vector forward = getForwardVector().mul(thrust);
 		
@@ -62,11 +62,11 @@ public class Quadcopter {
 		
 		GL11.glPushMatrix();
 		
+		GL11.glTranslatef(x, y, z);
+		
 		GL11.glRotatef(pitch, 1, 0, 0);
 		GL11.glRotatef(yaw, 0, 1, 0);
 		GL11.glRotatef(roll, 0, 0, 1);
-		
-		GL11.glTranslatef(x, y, z);
 		
 		Primitives.setColor(Color.GREEN);
 		Primitives.drawCylinder(12, 1, 0.2f);
