@@ -20,10 +20,10 @@ public class GCSclient extends Thread {
 			try {
 				int t;
 				String tmp="" ;
-				do {t = socket.getInputStream().read() ; tmp = tmp + (char)t; }
-				while (t!=10) ;
+				t = socket.getInputStream().read();
+				tmp = tmp + (char)t;
 				
-				System.out.println("|" + tmp + "|" ) ;
+				System.out.println(tmp) ;
 			} catch(Exception e) {
 				e.printStackTrace();
 			}

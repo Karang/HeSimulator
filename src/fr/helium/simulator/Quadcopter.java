@@ -14,7 +14,7 @@ public class Quadcopter {
 	private float pitch = 0;
 	private float roll = 0;
 	
-	private float thrust_ref = 1f;
+	private float thrust_ref = 0f;
 	private float yaw_ref = 0;
 	private float pitch_ref = 0;
 	private float roll_ref = 0;
